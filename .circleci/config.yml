@@ -137,40 +137,60 @@ jobs:
             npm i
             npm run test
 
-            
+
+  scan-backend:
+    docker:
+        # Docker image here
+      - image: circleci/node:13.8.0
+    steps:
+      # Checkout code from git
+      - checkout
+      # Restore from cache
+      
+      - restore_cache:
+          keys: [scanbackend-test]
+      # Your job code here
+      - run:
+          name: Scan-Backend
+          command: |
+            # Your code here
+            cd backend
+            npm install
+            # npm install oauth-sign@^0.9.0
+            npm audit fix --audit-level=critical --force
+            npm audit fix --audit-level=critical --force
+            npm audit --audit-level=critical
+      - save_cache:
+          paths: [backend/node_modules]
+          key: scanbackend-test
+
+
   # scan-frontend:
   #   docker:
+  #     # Docker image here
   #     - image: circleci/node:13.8.0
   #   steps:
+  #     # Checkout code from git
   #     - checkout
+  #     # Restore from cache
+      
   #     - restore_cache:
   #         keys: [scanfrontend-test]
+  #     # Your job code here
   #     - run:
-  #         name: Analyse Frontend
+  #         name: Scan-Frontend
   #         command: |
+  #           # Your code here
   #           cd frontend
-  #           npm update
-  #           npm audit fix --audit-level=critical
+  #           npm install
+  #           # npm install oauth-sign@^0.9.0
+  #           npm audit fix --audit-level=critical --force
+  #           npm audit --audit-level=critical
   #     - save_cache:
   #         paths: [frontend/node_modules]
   #         key: scanfrontend-test
 
-  # scan-backend:
-  #   docker:
-  #     - image: circleci/node:13.8.0
-  #   steps:
-  #     - checkout
-  #     - restore_cache:
-  #         keys: [scanbackend-test]
-  #     - run:
-  #         name: Analyse Backend
-  #         command: |
-  #           cd backend
-  #           npm i
-  #           npm audit fix --audit-level=critical
-  #     - save_cache:
-  #         paths: [backend/node_modules]
-  #         key: scanbackend-test
+
 
   # deploy-infrastructure:
   #   docker:
@@ -454,8 +474,8 @@ workflows:
           requires: [build-frontend]
       - test-backend:
           requires: [build-backend]
-      # - scan-backend:
-      #     requires: [build-backend]
+      - scan-backend:
+          requires: [build-backend]
       # - scan-frontend:
       #     requires: [build-frontend]
       # - deploy-infrastructure:
