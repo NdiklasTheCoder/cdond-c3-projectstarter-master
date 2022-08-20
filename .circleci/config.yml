@@ -12,6 +12,13 @@ commands:
           channel: C03PRUM60HG
           template: basic_fail_1
 
+  notify_on_success:
+    steps:
+      - slack/notify:
+          event: pass
+          channel: C03PRUM60HG
+          template: success_tagged_deploy_1
+
     # notify_on_success:
     # steps:
     #   - slack/notify:
@@ -104,13 +111,12 @@ jobs:
             cd frontend
             npm install
             npm run build
-            exit 1
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
 
       - notify_on_fail
-      # - notify_on_success
+      - notify_on_success
 
   # build-backend:
   #   docker:
