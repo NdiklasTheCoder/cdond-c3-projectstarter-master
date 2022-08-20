@@ -270,35 +270,39 @@ jobs:
       # Here's where you will add some code to rollback on failure      
       - notify_on_fail
       - notify_on_success
-  # configure-infrastructure:
-  #   docker:
-  #     # Docker image here that supports Ansible
-  #     - image: cimg/base:stable
-  #   steps:
-  #     # Checkout code from git
-  #     # Add ssh keys with fingerprint
-  #     # attach workspace
-  #     - checkout
-  #     - add_ssh_keys:
-  #         fingerprints:
-  #           - "64:af:20:32:af:2e:b7:78:1f:66:d5:22:e1:2c:92:85"
 
-  #     - attach_workspace:
-  #         at: ~/
+
+  configure-infrastructure:
+    docker:
+      # Docker image here that supports Ansible
+      - image: cimg/base:stable
+    steps:
+      # Checkout code from git
+      # Add ssh keys with fingerprint
+      # attach workspace
+      - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - "ff:ab:80:71:14:1c:37:99:33:14:e5:2b:ab:67:3b:a0"
+
+      - attach_workspace:
+          at: ~/
     
-  #     - install_ansible    
-  #     - install_awscli
+      - install_ansible    
+      - install_awscli
 
-  #     - run:
-  #         name: Install dependencies
-  #         command: |
-  #           cd .circleci/ansible
-  #           cat inventory.txt
-  #           ansible-playbook -i inventory.txt configure-server.yml
-  #     - destroy-environment
+      - run:
+          name: Install dependencies
+          command: |
+            cd .circleci/ansible
+            cat inventory.txt
+            ansible-playbook -i inventory.txt configure-server.yml
+      - destroy-environment
+      - revert-migrations
 
-
-  #     # Here's where you will add some code to rollback on failure      
+      - notify_on_fail
+      - notify_on_success
+      # Here's where you will add some code to rollback on failure      
 
   # run-migrations:
   #   docker:
