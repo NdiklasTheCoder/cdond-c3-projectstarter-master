@@ -5,7 +5,7 @@ orbs:
 
 commands:
 
-  notify_on_slack:
+  notify_on_fail:
     steps:
       - slack/notify:
           event: fail
@@ -109,7 +109,7 @@ jobs:
           paths: [frontend/node_modules]
           key: frontend-build
 
-      - notify_on_slack
+      - notify_on_fail
       # - notify_on_success
 
   # build-backend:
