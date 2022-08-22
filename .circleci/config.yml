@@ -518,6 +518,9 @@ jobs:
               echo "Fresh Stacks"
             fi
 
+      - notify_on_fail
+      - notify_on_success
+      
 workflows:
   default:
     jobs:
